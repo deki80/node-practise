@@ -30,13 +30,45 @@ const server = http.createServer((req, res) => {
     req.on('end', () => {
         buffer += decoder.end()
 
-        // send the response
-        res.end('Server response...')
+        // data object to send to router
+        const data = {
+            trimPath,
+            queryStringObj,
+            method,
+            headers,
+            buffer
+        }
 
-        console.log('Request payload: ', buffer)
+        // detect a route handler
+        const routerHandler = typeof(router[trimPath]) !== 'undefined' ? router[trimPath] : handler.notFound
+
+        routerHandler(data, (statusCode, payload) => {
+            statusCode = typeof(statusCode) == 'number' ? statusCode : 200
+            payload = typeof(payload) == 'object' ? payload : {}
+            
+            const payloadString = JSON.stringify(payload)
+
+            res.writeHead(statusCode)
+            res.end(payloadString)
+        })
     })
 
 })
 
 //listen on port 3000
 server.listen(3000, () => console.log('Server is listening on port 3000'))
+
+// set route handler
+const handler = {}
+
+handler.sample = (data, callback) => {
+    callback(406, {'name' : 'Dejan'})
+}
+
+handler.notFound = (data, callback) => {
+    callback(404)
+}
+// set router
+const router = {
+    'sample': handler.sample
+}
