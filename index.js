@@ -10,10 +10,13 @@ const server = http.createServer((req, res) => {
     
     const trimPath = path.replace(/^\/+|\/+$/g, '')
 
+    // parse the request method
+    const method = req.method.toLowerCase()
+
     // send the response
     res.end('Server response...')
 
-    console.log(`Requested path: ${trimPath}`)
+    console.log(`Requested path: ${trimPath} with method: ${method}`)
 })
 
 //listen on port 3000
