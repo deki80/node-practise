@@ -10,6 +10,9 @@ const server = http.createServer((req, res) => {
     
     const trimPath = path.replace(/^\/+|\/+$/g, '')
 
+    // parse the query string
+    const queryStringObj = parsedUrl.query
+
     // parse the request method
     const method = req.method.toLowerCase()
 
@@ -17,6 +20,7 @@ const server = http.createServer((req, res) => {
     res.end('Server response...')
 
     console.log(`Requested path: ${trimPath} with method: ${method}`)
+    console.log('Query string object: ', queryStringObj)
 })
 
 //listen on port 3000
