@@ -1,6 +1,7 @@
 // dependencies
 const http = require('http')
 const url = require('url')
+const StringDecoder = require('string_decoder').StringDecoder
 
 // create a server and response to request
 const server = http.createServer((req, res) => {
@@ -19,12 +20,22 @@ const server = http.createServer((req, res) => {
     // get request headers
     const headers = req.headers
 
-    // send the response
-    res.end('Server response...')
+    // get request stream
+    const decoder = new StringDecoder('utf-8')
+    let buffer = ''
+    req.on('data', (data) => {
+        buffer += decoder.write(data)
+    })
 
-    console.log(`Requested path: ${trimPath} with method: ${method}`)
-    console.log('Query string object: ', queryStringObj)
-    console.log('Request headers ', headers)
+    req.on('end', () => {
+        buffer += decoder.end()
+
+        // send the response
+        res.end('Server response...')
+
+        console.log('Request payload: ', buffer)
+    })
+
 })
 
 //listen on port 3000
