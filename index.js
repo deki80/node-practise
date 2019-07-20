@@ -16,11 +16,15 @@ const server = http.createServer((req, res) => {
     // parse the request method
     const method = req.method.toLowerCase()
 
+    // get request headers
+    const headers = req.headers
+
     // send the response
     res.end('Server response...')
 
     console.log(`Requested path: ${trimPath} with method: ${method}`)
     console.log('Query string object: ', queryStringObj)
+    console.log('Request headers ', headers)
 })
 
 //listen on port 3000
