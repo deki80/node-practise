@@ -11,4 +11,5 @@ Create a https folder in a root of a project, and generate a key.pem and a cert.
 ## API endpoints
 
 /sample
+
 for testing purpose, returns a json object
