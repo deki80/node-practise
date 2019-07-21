@@ -85,10 +85,15 @@ handler.sample = (data, callback) => {
     callback(406, {'name' : 'Dejan'})
 }
 
+handler.ping = (data, callback) => {
+    callback(200)
+}
+
 handler.notFound = (data, callback) => {
     callback(404)
 }
 // set router
 const router = {
-    'sample': handler.sample
+    'sample': handler.sample,
+    'ping': handler.ping
 }
