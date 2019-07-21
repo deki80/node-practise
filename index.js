@@ -1,13 +1,33 @@
 // dependencies
 const http = require('http')
+const https = require('https')
 const url = require('url')
 const StringDecoder = require('string_decoder').StringDecoder
+const fs = require('fs')
 
 // require config
 const config = require('./config')
 
-// create a server and response to request
-const server = http.createServer((req, res) => {
+// create a http server and pass the request to unified handler
+const httpServer = http.createServer((req, res) => {
+    unifiedServer(req,res)
+})
+//listen on configured port
+httpServer.listen(config.httpPort, () => console.log(`Server is listening on port ${config.httpPort} on environment ${config.envName}`))
+
+// create https server and pass the request to unified handler
+const httpsOptions = {
+    key: fs.readFileSync('./https/key.pem'),
+    cert: fs.readFileSync('./https/cert.pem')
+}
+const httpsServer = https.createServer(httpsOptions, (req, res) => {
+    unifiedServer(req,res)
+})
+// listen on configured port
+httpsServer.listen(config.httpsPort, () => console.log(`Server listening on port ${config.httpsPort}`))
+
+// set the unified req, res handler
+const unifiedServer = (req,res) => {
     // parse the url
     const parsedUrl = url.parse(req.url, true)
     const path = parsedUrl.pathname
@@ -56,11 +76,7 @@ const server = http.createServer((req, res) => {
             res.end(payloadString)
         })
     })
-
-})
-
-//listen on configured port
-server.listen(config.port, () => console.log(`Server is listening on port ${config.port} on environment ${config.envName}`))
+}
 
 // set route handler
 const handler = {}

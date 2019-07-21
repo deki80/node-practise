@@ -1,11 +1,13 @@
 // set environment object
 const environments = {
     staging: {
-        port : 3000,
+        httpPort : 3000,
+        httpsPort: 3001,
         envName: 'staging'
     },
     production: {
-        port: 8080,
+        httpPort: 8080,
+        httpsPort: 8081,
         envName: 'production'
     }
 }
