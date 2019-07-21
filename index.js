@@ -3,6 +3,9 @@ const http = require('http')
 const url = require('url')
 const StringDecoder = require('string_decoder').StringDecoder
 
+// require config
+const config = require('./config')
+
 // create a server and response to request
 const server = http.createServer((req, res) => {
     // parse the url
@@ -56,8 +59,8 @@ const server = http.createServer((req, res) => {
 
 })
 
-//listen on port 3000
-server.listen(3000, () => console.log('Server is listening on port 3000'))
+//listen on configured port
+server.listen(config.port, () => console.log(`Server is listening on port ${config.port} on environment ${config.envName}`))
 
 // set route handler
 const handler = {}
